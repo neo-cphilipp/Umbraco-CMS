@@ -15,10 +15,10 @@ namespace Umbraco.Cms.Tests.Integration.Umbraco.Core.Services
         private IKeyValueService KeyValueService => GetRequiredService<IKeyValueService>();
 
         [Test]
-        [TestCase(ConsentLevel.Minimal)]
-        [TestCase(ConsentLevel.Basic)]
-        [TestCase(ConsentLevel.Detailed)]
-        public void Can_Store_Consent(ConsentLevel level)
+        [TestCase(AnalyticsLevel.Minimal)]
+        [TestCase(AnalyticsLevel.Basic)]
+        [TestCase(AnalyticsLevel.Detailed)]
+        public void Can_Store_Consent(AnalyticsLevel level)
         {
             MetricsConsentService.SetConsentLevel(level);
 
@@ -30,7 +30,7 @@ namespace Umbraco.Cms.Tests.Integration.Umbraco.Core.Services
         [Test]
         public void Enum_Stored_as_string()
         {
-            MetricsConsentService.SetConsentLevel(ConsentLevel.Detailed);
+            MetricsConsentService.SetConsentLevel(AnalyticsLevel.Detailed);
 
             var stringValue = KeyValueService.GetValue(Cms.Core.Services.MetricsConsentService.Key);
 

@@ -14,21 +14,21 @@ namespace Umbraco.Cms.Core.Services
             _keyValueService = keyValueService;
         }
 
-        public ConsentLevel GetConsentLevel()
+        public AnalyticsLevel GetConsentLevel()
         {
             var analyticsLevelString = _keyValueService.GetValue(Key);
 
-            if (analyticsLevelString is null || Enum.TryParse(analyticsLevelString, out ConsentLevel analyticsLevel) is false)
+            if (analyticsLevelString is null || Enum.TryParse(analyticsLevelString, out AnalyticsLevel analyticsLevel) is false)
             {
-                return ConsentLevel.Basic;
+                return AnalyticsLevel.Basic;
             }
 
             return analyticsLevel;
         }
 
-        public void SetConsentLevel(ConsentLevel consentLevel)
+        public void SetConsentLevel(AnalyticsLevel analyticsLevel)
         {
-            _keyValueService.SetValue(Key, consentLevel.ToString());
+            _keyValueService.SetValue(Key, analyticsLevel.ToString());
         }
     }
 }

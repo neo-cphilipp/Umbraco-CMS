@@ -13,7 +13,7 @@ namespace Umbraco.Cms.Web.BackOffice.Controllers
             _metricsConsentService = metricsConsentService;
         }
 
-        public ConsentLevel GetConsentLevel()
+        public AnalyticsLevel GetConsentLevel()
         {
             return _metricsConsentService.GetConsentLevel();
         }
@@ -23,25 +23,25 @@ namespace Umbraco.Cms.Web.BackOffice.Controllers
         {
             if (telemetryResource.TelemetryLevel == "Minimal")
             {
-                _metricsConsentService.SetConsentLevel(ConsentLevel.Minimal);
+                _metricsConsentService.SetConsentLevel(AnalyticsLevel.Minimal);
                 return Ok();
             }
 
             if (telemetryResource.TelemetryLevel == "Basic")
             {
-                _metricsConsentService.SetConsentLevel(ConsentLevel.Basic);
+                _metricsConsentService.SetConsentLevel(AnalyticsLevel.Basic);
                 return Ok();
             }
 
             if (telemetryResource.TelemetryLevel == "Detailed")
             {
-                _metricsConsentService.SetConsentLevel(ConsentLevel.Detailed);
+                _metricsConsentService.SetConsentLevel(AnalyticsLevel.Detailed);
                 return Ok();
             }
 
             return BadRequest();
         }
 
-        public IEnumerable<ConsentLevel> GetAllLevels() => new[] { ConsentLevel.Minimal, ConsentLevel.Basic, ConsentLevel.Detailed };
+        public IEnumerable<AnalyticsLevel> GetAllLevels() => new[] { AnalyticsLevel.Minimal, AnalyticsLevel.Basic, AnalyticsLevel.Detailed };
     }
 }
