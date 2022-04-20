@@ -97,7 +97,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
