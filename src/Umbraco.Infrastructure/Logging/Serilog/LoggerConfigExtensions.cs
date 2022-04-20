@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
+using Serilog.Enrichers;
 using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Formatting.Compact;
@@ -17,8 +18,6 @@ namespace Umbraco.Extensions
 {
     public static class LoggerConfigExtensions
     {
-        private const string AppDomainId = "AppDomainId";
-
         /// <summary>
         /// This configures Serilog with some defaults
         /// Such as adding ProcessID, Thread, AppDomain etc
@@ -57,7 +56,6 @@ namespace Umbraco.Extensions
                 .Enrich.WithProcessId()
                 .Enrich.WithProcessName()
                 .Enrich.WithThreadId()
-                .Enrich.WithProperty(AppDomainId, AppDomain.CurrentDomain.Id)
                 .Enrich.WithProperty("AppDomainAppId", hostingEnvironment.ApplicationId.ReplaceNonAlphanumericChars(string.Empty))
                 .Enrich.WithProperty("MachineName", Environment.MachineName)
                 .Enrich.With<Log4NetLevelMapperEnricher>()
@@ -109,7 +107,8 @@ namespace Umbraco.Extensions
         /// <remarks>
         ///    Used in config - If renamed or moved to other assembly the config file also has be updated.
         /// </remarks>
-        public static LoggerConfiguration UmbracoFile(this LoggerSinkConfiguration configuration,
+        public static LoggerConfiguration UmbracoFile(
+            this LoggerSinkConfiguration configuration,
             string path,
             ITextFormatter formatter = null,
             LogEventLevel restrictedToMinimumLevel = LogEventLevel.Verbose,
@@ -119,33 +118,26 @@ namespace Umbraco.Extensions
             RollingInterval rollingInterval = RollingInterval.Day,
             bool rollOnFileSizeLimit = false,
             int? retainedFileCountLimit = 31,
-            Encoding encoding = null
-   )
+            Encoding encoding = null)
         {
-
-            if (formatter is null)
-            {
-                formatter = new CompactJsonFormatter();
-            }
+            formatter ??= new CompactJsonFormatter();
 
             return configuration.Async(
-                asyncConfiguration => asyncConfiguration.Map(AppDomainId, (_,mapConfiguration) =>
-                        mapConfiguration.File(
-                            formatter,
-                            path,
-                            restrictedToMinimumLevel,
-                            fileSizeLimitBytes,
-                            levelSwitch,
-                            buffered:true,
-                            shared:false,
-                            flushToDiskInterval,
-                            rollingInterval,
-                            rollOnFileSizeLimit,
-                            retainedFileCountLimit,
-                            encoding,
-                            null),
-                    sinkMapCountLimit:0)
-                );
+                cfg =>
+                    cfg.File(
+                        formatter,
+                        path,
+                        restrictedToMinimumLevel,
+                        fileSizeLimitBytes,
+                        levelSwitch,
+                        buffered:true,
+                        shared:false,
+                        flushToDiskInterval,
+                        rollingInterval,
+                        rollOnFileSizeLimit,
+                        retainedFileCountLimit,
+                        encoding,
+                        null));
         }
 
 
